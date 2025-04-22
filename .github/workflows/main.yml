@@ -1,0 +1,34 @@
+name: FlutterFlow Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.0'  # اختر الإصدار المناسب
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+
+      - name: Run build
+        run: |
+          flutter build apk --release  # قم بتعديل البناء حسب متطلباتك
+
+      - name: Deploy to FlutterFlow
+        run: |
+          flutter pub run flutterflow_cli deploy --api-key ${{ secrets.FLUTTERFLOW_API_KEY }}
